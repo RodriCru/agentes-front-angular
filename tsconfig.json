@@ -3,6 +3,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@Components/*":["app/presentation/components/*"],
+      "@use-cases/*":["app/core/use-cases/*"],
+      "@interfaces/*":["app/interfaces/*",]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
