@@ -8,6 +8,7 @@ import { TextMessageBoxFileComponent, TextMessageEvent } from '@Components/text-
 import { TextMessageBoxEvent, TextMessageBoxSelectComponent } from '@Components/text-boxes/textMessageBoxSelect/textMessageBoxSelect.component';
 import { Message } from '@interfaces/message.interface';
 import { OpenAiService } from 'app/presentation/services/openai.service';
+import { GptMessageOrthographyComponent } from "@Components/chat-bubbles/gptMessageOrthography/gptMessageOrthography.component";
 
 @Component({
   selector: 'app-orthography-page',
@@ -16,31 +17,52 @@ import { OpenAiService } from 'app/presentation/services/openai.service';
     GptMessageComponent,
     MyMeesageComponent,
     TypingLoaderComponent,
-
+    GptMessageComponent,
     //Obligatoriamente se descomenta una las otras dos deben de comentarse
-
-    //TextMessageBoxComponent, // descomentar si se desea solo habilitar la caja de texto 
-    //TextMessageBoxFileComponent, // descomentar si se desea activar la caja de texto con subida de archivo
-    TextMessageBoxSelectComponent, // descomentar si se desea tener la caja de texto y el select
-  ],
+    TextMessageBoxComponent,
+    GptMessageOrthographyComponent
+],
   templateUrl: './orthographyPage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class OrthographyPageComponent {
 
-  public messages = signal<Message[]>([{ text: 'Holaaaa', isGpt: false}]);
+  public messages = signal<Message[]>([]);
   public isLoading = signal(false);
   public openAiService = inject (OpenAiService);
 
   handleMessage( prompt: string){
-    console.log({prompt});
+    // console.log({prompt});
+    this.isLoading.set(true);
+
+    this.messages.update( (prev) => [
+      ...prev,
+      {
+        isGpt: false,
+        text: prompt
+      }
+    ]);
+
+    this.openAiService.checkOrthography(prompt)
+      .subscribe( resp => {
+        this.isLoading.set(false);
+        console.log(resp);
+        this.messages.update( prev => [
+          ...prev,
+          {
+            isGpt: true,
+            text: resp.message,
+            info: resp,
+          }
+        ])
+      })
   }
 
-  handleMessageWithFile( {prompt, file }: TextMessageEvent){
-    console.log({prompt, file });
-  }
+  //handleMessageWithFile( {prompt, file }: TextMessageEvent){
+  //  console.log({prompt, file });
+  //}
 
-  handleMessageWithSelect( event: TextMessageBoxEvent){
-    console.log(event);
-  }
+  //handleMessageWithSelect( event: TextMessageBoxEvent){
+  //  console.log(event);
+  //}
 }
