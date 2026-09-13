@@ -2,7 +2,7 @@
  * Paso 3 del Use Case creado mandar a llamarlo y pasarle los parámetros
  */
 import { Injectable } from '@angular/core';
-import { orthographyUseCase, prosConsUseCase, prosConsStreamUseCase, textToAudioUseCase } from '@use-cases/index';
+import { orthographyUseCase, prosConsUseCase, prosConsStreamUseCase, textToAudioUseCase, audioToTextUseCase } from '@use-cases/index';
 import { translateTextUseCase } from '@use-cases/translate/translate-text.use-case';
 import { from } from 'rxjs';
 
@@ -26,5 +26,9 @@ export class OpenAiService {
 
     textToAudio( prompt: string, voice: string){
         return from( textToAudioUseCase(prompt, voice) );
+    }
+
+    audioToText( file: File, prompt?: string){
+        return from( audioToTextUseCase(file, prompt) );
     }
 }
