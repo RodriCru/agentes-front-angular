@@ -1,5 +1,5 @@
 /**
- * Paso 3, Mandar a llamar el service y pasandole los parámetros y obtieniendo los parametros para mostrar en el .HTML
+ * Paso 4, Mandar a llamar el service y pasandole los parámetros y obtieniendo los parametros para mostrar en el .HTML
  */
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
